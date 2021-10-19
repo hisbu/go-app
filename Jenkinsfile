@@ -20,7 +20,7 @@ pipeline {
     stage ("test docker image"){
       steps{
         sh 'docker run -d --rm --name testimage -p 9000:9000 hisbu/my-goapp'
-        // input message: "Finished test image? (Click procced to continue)"
+        input message: "Finished test image? (Click procced to continue)"
       }
     }
 
@@ -49,6 +49,13 @@ pipeline {
         sh 'docker rmi hisbu/my-goapp'
         // sh "docker rmi registry.hub.docker.com/hisbu/reactapp-jcde:'${DOCKER_TAG}'"
       }
+    }
+
+    stage("deploy helm chart"){
+			steps{
+				sh 'helm install my-goapp ./helm/mygo'
+				echo "install helm"
+			}
     }
 
     //stage sembilan
